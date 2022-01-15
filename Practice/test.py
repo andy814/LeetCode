@@ -1,1 +1,4 @@
-print("0"*2)
+from collections import deque
+
+de=deque()
+print(de)
