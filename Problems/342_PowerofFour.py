@@ -16,7 +16,7 @@ class Solution:
         met1=False
         if n&3==0: # end with 00
             for i in range(len(binaryN)-3,-1,-1):
-                if binaryN[i]==1:
+                if binaryN[i]=="1":
                     if (len(binaryN)-i)%2==0:
                         return False
                     else:
