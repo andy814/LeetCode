@@ -1,3 +1,4 @@
+from audioop import reverse
 import collections
 from typing import *
 
@@ -65,3 +66,23 @@ class Solution3:
                 visited[i]=max(visited[i+1],questions[i][0]+visited[ i+questions[i][1]+1 ] )
         return visited[0]
 
+
+class Solution4:
+    def maxRunTime(self, n: int, batteries: List[int]) -> int: # time limit exceeded
+        count=0
+        batteries.sort(reverse=True)
+        while batteries[n-1]>0:
+            batteries[:n]=[i-1 for i in batteries[:n]] 
+            batteries.sort(reverse=True)   
+            count+=1
+        return count
+
+    def maxRunTime2(self, n: int, batteries: List[int]) -> int: # nlogn
+        batteries.sort()
+        totalEnergy=sum(batteries)
+        while batteries[-1]>totalEnergy//n:
+            maxBattery=batteries.pop()
+            n-=1
+            totalEnergy=totalEnergy-maxBattery
+        limit=totalEnergy//n
+        return limit
