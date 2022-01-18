@@ -2,3 +2,4 @@ https://github.com/azl397985856/leetcode/blob/master/README.md
 122 is medium instead of easy
 172 is medium instead of easy
 198 is medium instead of easy
+371 is medium instead of easy
