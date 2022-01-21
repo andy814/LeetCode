@@ -1,4 +1,1 @@
-import collections
-
-aa=collections.defaultdict(int)
-print(aa[0])
+print(4/2)

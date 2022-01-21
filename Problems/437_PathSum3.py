@@ -38,27 +38,20 @@ class Solution:
 
 
     def pathSum2(self, root: Optional[TreeNode], targetSum: int) -> int: # O(n)
-        
         if not root:
             return 0
         global acc
-        
         count=0
         acc+=root.val
-
         if acc==targetSum:
             count+=1
         if acc-targetSum in visited:
             count+=visited[acc-targetSum]
-
         visited[acc]+=1
-
         if root.left:
             count+=self.pathSum2(root.left,targetSum)
         if root.right:
             count+=self.pathSum2(root.right,targetSum)
-
         visited[acc]-=1
         acc-=root.val
-
         return count
