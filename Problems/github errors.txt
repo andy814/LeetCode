@@ -4,3 +4,5 @@ https://github.com/azl397985856/leetcode/blob/master/README.md
 198 is medium instead of easy
 371 is medium instead of easy
 437 is medium instead of easy
+575 description changed
+665 is medium instead of easy
