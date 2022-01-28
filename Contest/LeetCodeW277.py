@@ -1,3 +1,4 @@
+import collections
 from tkinter.messagebox import RETRYCANCEL
 from typing import *
 class Solution1:
@@ -33,7 +34,7 @@ class Solution3:
                     ret.remove(nums[-1])
         return ret
 
-    def findLonely2(self, nums: List[int]) -> List[int]:
+    def findLonely2(self, nums: List[int]) -> List[int]: # nlogn
         nums.sort()
         ret=[]
         for i in range(1,len(nums)-1):
@@ -47,6 +48,16 @@ class Solution3:
                 if nums[-1] not in ret:
                     ret.append(nums[-1])
         return ret
+
+    def findLonely3(self, nums: List[int]) -> List[int]: # O(n)
+        check = collections.defaultdict(int)
+        for i in nums:
+            check[i] += 1
+        ans = []
+        for i in nums:
+            if check[i]==1 and check[i+1]==0 and check[i-1]==0:
+                ans.append(i)
+        return ans
 
 class Solution4: # bit-masking
     def maximumGood(self, statements: List[List[int]]) -> int:
