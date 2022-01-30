@@ -1,3 +1,1 @@
-aa=[1,2,3]
-del aa[:2]
-print(aa)
+print(7*112%7==0)
