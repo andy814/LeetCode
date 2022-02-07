@@ -76,7 +76,7 @@ def quickSortSub(aa,start,end):
     aa[i],aa[end]=aa[end],aa[i]
     return i
 
-def simpleQuickSort(aa):
+def simpleQuickSort(aa): # 额外空间，但是有稳定性！
     if len(aa)<2:
         return aa
     low,same,high=[],[],[]

@@ -33,8 +33,6 @@ class Solution2:
 
         return ret
 
-#每个字母计算k次。总共klogk
-#遍历走s步，每步
 class Solution3:
     def subStrHash(self, s: str, power: int, modulo: int, k: int, hashValue: int) -> str: # O(s*klogk)
         def calcHash(sub,power,modulo):
@@ -86,3 +84,93 @@ class Solution3:
 
             if hash%modulo==hashValue:
                 return s[i:i+k]
+
+    def subStrHash4(self, s: str, power: int, mod: int, k: int, hashValue: int) -> str: # O(s+k), remove deletion by traversing in the reversed order, but still TLE sometimes
+        
+        orD={}
+        for i in range(1,27):
+            orD[chr(i+96)]=i
+            
+        hash=0
+        temp=1
+        
+        ans=""
+        for i in range(len(s)-k,-1,-1):
+            if i==len(s)-k:
+                for j in range(k):
+                    hash+=(orD[s[i+j]])*temp
+                    if j < k-1:
+                        temp*=power
+            else:
+                hash-=(orD[s[i+k]])*(temp)
+                hash*=power
+                hash+=(orD[s[i]])
+            if hash%mod==hashValue:
+                ans=s[i:i+k]
+        return ans
+
+#Solution4
+class Solution:
+    class UnionFind():
+        def __init__(self,n):
+            self.p=list(range(n))
+            self.rank=[1]*n
+            self.size=[1]*n
+        
+        def find(self,i):
+            if i!=self.p[i]:
+                self.p[i]=self.find(self.p[i])
+            return self.p[i]
+
+        def union(self,i,j):
+            rooti=self.find(i)
+            rootj=self.find(j)
+
+            if rooti==rootj:
+                return
+
+            if self.rank[rooti]>self.rank[rootj]:
+                self.p[rootj]=rooti
+                self.size[rooti]+=self.size[rootj]
+                self.size[rootj]=0
+            elif self.rank[rooti]<self.rank[rootj]:
+                self.p[rooti]=rootj
+                self.size[rootj]+=self.size[rooti]
+                self.size[rooti]=0
+            else:
+                self.p[rootj]=rooti
+                self.rank[rooti]+=1
+                self.size[rooti]+=self.size[rootj]
+                self.size[rootj]=0
+
+    def groupStrings(self, words: List[str]) -> List[int]:
+
+        def encode(word):
+            ret=0
+            for char in word:
+                offset=ord(char)-ord("a")
+                ret|=1<<offset
+            return ret
+
+        UF=Solution.UnionFind(len(words))
+        visited={}
+        for i,word in enumerate(words):
+            mask=encode(word)
+            if mask in visited:
+                UF.union(visited[mask],i)
+            visited[mask]=i
+            for j in range(26):
+                if mask&(1<<j)!=0:
+                    if mask^(1<<j) in visited:
+                        UF.union(visited[mask^(1<<j)],i)
+                    visited[mask^(1<<j)]=i
+
+        for i in range(len(words)):
+            UF.find(i)
+
+        return [ len(set(UF.p)),max(UF.size) ]
+
+    
+
+sol=Solution()
+print(sol.groupStrings(["a","b","ab","cde"]))
