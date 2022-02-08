@@ -1,5 +1,7 @@
-a=7
-print(a&1<<1) # return 2    
-
-["Bitset","flip","unfix","all","fix","fix","unfix","all","count","toString","toString","toString","unfix","flip","all","unfix","one","one","all","fix","unfix"]
-[[2],[],[1],[],[1],[1],[1],[],[],[],[],[],[0],[],[],[0],[],[],[],[0],[0]]
+from itertools import product
+aa=[1,2,3]
+bb=[100,200,300]
+cc=product(aa,bb)
+print(type(cc))
+print(list(cc))
+print(list(cc))
