@@ -1,7 +1,6 @@
 from itertools import product
-aa=[1,2,3]
-bb=[100,200,300]
-cc=product(aa,bb)
-print(type(cc))
-print(list(cc))
-print(list(cc))
+
+aa=[tuple("()")]*2
+result=product(*aa)
+for i in result:
+    print(i)
