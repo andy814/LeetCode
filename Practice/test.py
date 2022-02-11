@@ -1,3 +1,2 @@
-aa=[3,1,2,5,4]
-aa[1:].sort()
-print(aa)
+aa=(1,2)
+print(type(aa))
