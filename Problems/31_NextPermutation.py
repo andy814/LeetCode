@@ -19,3 +19,5 @@ class Solution:
             nums[swapidx+1:]=sorted(nums[swapidx+1:])
         else:
             nums.reverse()
+
+
