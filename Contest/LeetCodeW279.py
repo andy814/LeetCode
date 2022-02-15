@@ -132,7 +132,7 @@ class Bitset: # list solution
         return "".join([str(num) for num in self.nums])
 
 
-class Solution:
+class Solution4:
     def minimumTime(self, s: str) -> int:
         if len(s)==1:
             return int(s)

@@ -1,5 +1,8 @@
 from collections import defaultdict
+from collections import Counter
+from functools import lru_cache
 from typing import *
+from functools import lru_cache
 class Solution1:
     def countOperations(self, num1: int, num2: int) -> int:
         count=0
@@ -11,8 +14,9 @@ class Solution1:
             count+=1
         return count
 
-class Solution2: # 看答案
-    def minimumOperations(self, nums: List[int]) -> int:
+class Solution2: 
+    '''
+    def minimumOperations(self, nums: List[int]) -> int: # this one is horrible
         oddCount=defaultdict(int)
         evenCount=defaultdict(int)
         oddList=nums[1::2]
@@ -53,8 +57,21 @@ class Solution2: # 看答案
 
         else:
             return len(oddList)-maxOddCount + len(evenList)-maxEvenCount
+    '''
+    def minimumOperations(self, nums: List[int]) -> int:
+        if len(nums)<=1:
+            return 0
+        pad=lambda x:x+[(None,2)*(2-len(x))]
+        even=pad(Counter(nums[0::2]))
+        odd=pad(Counter(nums[1::2]))
+        if even.most_common[0][0]!=odd.most_common[0][0]:
+           return len(nums)-even.most_common[0][1]-odd.most_common[0][1]
+        else:
+            return len(nums)-max( even.most_common[1][1]+odd.most_common[0][1], even.most_common[0][1]+odd.most_common[1][1]  )
 
-class Solution:
+
+
+class Solution3:
     def minimumRemoval(self, beans: List[int]) -> int:
         if len(beans)==1:
             return 0
@@ -70,3 +87,39 @@ class Solution:
             beansToTake=beanSum-beans[i]*(len(beans)-i)
             globalMin=min(globalMin,beansTaken+beansToTake)
         return globalMin
+
+class Solution4:
+    '''
+    def maximumANDSum(self, nums: List[int], numSlots: int) -> int: # TLE
+        mask=2**(numSlots*2)-1 # 1:available 0:occupied
+        # 99 <- 332211
+        @lru_cache(None)
+        def dp(startIdx,mask):
+            if startIdx>=len(nums):
+                return 0
+            ans=0
+            for i in range(numSlots*2):
+                slotNum=i//2+1
+                if mask&(1<<i):
+                    ans=max( ans, (slotNum&nums[startIdx]) + dp(startIdx+1,mask^(1<<i)) )
+            return ans
+        return dp(0,mask)
+    '''
+    def maximumANDSum(self, nums: List[int], numSlots: int) -> int: 
+        mask1=2**(numSlots)-1 # 1:available 0:occupied
+        mask2=mask1
+        # 99 <- 332211
+        @lru_cache(None)
+        def dp(startIdx,mask1,mask2):
+            if startIdx>=len(nums):
+                return 0
+            ans=0
+            for i in range(numSlots):
+                slotNum=i+1
+                if mask1&(1<<i):
+                    if mask2&(1<<i):
+                        ans=max( ans, (slotNum&nums[startIdx]) + dp(startIdx+1,mask1,mask2^(1<<i) ) )
+                    else:
+                        ans=max( ans, (slotNum&nums[startIdx]) + dp(startIdx+1,mask1^(1<<i),mask2) ) 
+            return ans
+        return dp(0,mask1,mask2)
