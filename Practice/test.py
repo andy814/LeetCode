@@ -1,2 +1,3 @@
-for lIdx in range(-2,-1,-1):
-    print("a")
+from math import comb
+
+print(comb(36,15))

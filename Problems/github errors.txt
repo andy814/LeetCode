@@ -7,5 +7,8 @@ https://github.com/azl397985856/leetcode/blob/master/README.md
 575 description changed
 665 is medium instead of easy
 874 is medium instead of easy
+
 1128 incorrect indent
 1332 0 input is impossible
+
+60 is hard instead of medium
