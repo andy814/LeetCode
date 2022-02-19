@@ -12,3 +12,4 @@ https://github.com/azl397985856/leetcode/blob/master/README.md
 1332 0 input is impossible
 
 60 is hard instead of medium
+94 is easy instead of medium
