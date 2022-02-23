@@ -11,3 +11,10 @@ class Solution:
             return []
         ret=[root.val]
         return self.inorderTraversal(root.left)+ret+self.inorderTraversal(root.right)
+
+    def inorderTraversal_iter(self, root: Optional[TreeNode]) -> List[int]:
+        stack=[]
+        if root==None:
+            return []
+        ret=[root.val]
+        return self.inorderTraversal(root.left)+ret+self.inorderTraversal(root.right)

@@ -148,33 +148,5 @@ class Solution4:
         row1,col1,row2,col2=row1+1,col1+1,row2+1,col2+1
         return grid[row2][col2]-grid[row1-1][col2]-grid[row2][col1-1]+grid[row1-1][col1-1]
 
-
-        '''
-        def gen_row_col_prefix(grid): #答案1
-            m,n=len(grid),len(grid[0])
-            dp = [[0] * (n+1) for _ in range(m+1)] 
-            for c, r in product(range(n), range(m)):
-                dp[r+1][c+1] = dp[r+1][c] + dp[r][c+1] - dp[r][c] + grid[r][c]
-            return dp
-        
-        def gen_row_col_prefix(grid): # 答案2
-            prefix = [[0] * (len(grid[0]) + 1)]
-            for row in grid:
-                row = list(accumulate(row, initial=0))
-                for col_id in range(len(row)):
-                    row[col_id] += prefix[-1][col_id]
-                prefix.append(row)
-            return prefix
-        
-        def gen_row_col_prefix(grid): #我的答案
-            
-            m,n=len(grid)+1,len(grid[0])+1
-            ret=np.zeros((m,n),dtype=int)
-            for i in range(1,m):
-                for j in range(1,n):
-                    ret[i][j]=ret[i-1][j]+ret[i][j-1]-ret[i-1][j-1]+grid[i-1][j-1]
-            return ret
-        '''
-
 sol=Solution4()
 print(sol.possibleToStamp([[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0]],4,3))
