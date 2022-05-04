@@ -1,8 +1,15 @@
 # source: https://leetcode.com/problems/count-good-triplets-in-an-array/discuss/1783185/Python-O(NlogN)-2-Solutions-using-Fenwick-Tree
 class FenwickTree():
-    def __init__(self, N):
+    def __init__(self, N=0):
         self.N = N
         self.bit = [0 for i in range(N+1)]
+
+    def construct(self,aa):
+        self.N=len(aa)
+        self.bit=[0 for i in range(self.N+1)]
+        for i,num in enumerate(aa):
+            self.add(i,num)
+
 
     def add(self, index, value):
         index += 1
@@ -95,4 +102,9 @@ print("Sum of elements in arr[0..5]"+
 # 也可以理解为i += i & (-i)是向上走，直到通过右拐遇到祖先节点。i -= i & (-i)向上走，直到通过左拐遇到祖先节点（未证明）
 # 并不总是树形，比如n=5时会有一个节点是分离态（因为6没加进去）。但是不妨碍算法运行。
 # 这个数据结构没用数组的第0项。
+# Fenwick Tree的元素个数是固定的，不过可以提前弄一堆为0的元素来模拟变化（和使用数组同样道理），置0为去除，0置其他数为添加
 
+FT=FenwickTree(5)
+FT.add(0,1)
+print(FT.bit)
+print(FT.query(1,4))

@@ -1,5 +1,12 @@
 import collections
 from logging.config import valid_ident
+import time
+
+class ListNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
 
 # Traverse:
 def preorder(root):
@@ -37,7 +44,8 @@ def postorder(root):
         else:
             root = None
 
-'''
+
+            
 n1=ListNode(1)
 n2=ListNode(2)
 n3=ListNode(3)
@@ -54,6 +62,8 @@ n3.left=n6
 n3.right=n7
 
 preOrder2(n1)
+print("---")
 inOrder2(n1)
+print("---")
 postOrder2(n1)
-'''
+print("---")
