@@ -6,6 +6,7 @@ from itertools import combinations
 import collections
 from nose import run_exit
 from sortedcollections import SortedList
+from collections import deque
 
 class Solution1:
     def countPrefixes(self, words: List[str], s: str) -> int:
@@ -46,7 +47,7 @@ class Solution2:
         return retIdx
 
 from sortedcontainers import SortedList
-class Solution:
+class Solution3:
     def countUnguarded(self, m: int, n: int, guards: List[List[int]], walls: List[List[int]]) -> int:
         horizontalGuards=collections.defaultdict(SortedList)
         verticalGuards=collections.defaultdict(SortedList)
@@ -115,8 +116,48 @@ class Solution:
                     count+=1
         return count
                 
-                    
 
 
+class Solution4:
+    def maximumMinutes(self, grid: List[List[int]]) -> int:
+        m=len(grid)
+        n=len(grid[0])
+        fireBoard=[[-1]*n for _ in range(m)]
+        personBoard=[[-1]*n for _ in range(m)]
+        
+        def bfs(queue,board,isFire):
+            while queue:
+                r,c,time=queue.pop()
+                board[r][c]=time
+                #print(board[r][c])
+                for nr,nc in [(r+1,c),(r-1,c),(r,c+1),(r,c-1)]:
+                    if nr<0 or nr>=m or nc<0 or nc>=n:
+                        continue
 
-
+                    if isFire:
+                        if grid[nr][nc]==0 and fireBoard[nr][nc]==-1:
+                            queue.appendleft((nr,nc,time+1))
+                    else:
+                        if board[nr][nc]!=-1:
+                            continue
+                        if nr==m-1 and nc==n-1 and (fireBoard[nr][nc]==-1 or fireBoard[nr][nc]>=time+1):
+                            queue.appendleft((nr,nc,time+1))
+                            continue
+                        if grid[nr][nc]==0 and (fireBoard[nr][nc]==-1 or fireBoard[nr][nc]>time+1):
+                            queue.appendleft((nr,nc,time+1))
+                            continue
+        
+        bfs(collections.deque( [ (r,c,0) for r in range(m) for c in range(n) if grid[r][c]==1] ),fireBoard,True)
+        bfs(collections.deque([ (0,0,0) ]),personBoard,False)
+        print(fireBoard)
+        print(personBoard)
+        if personBoard[-1][-1]==-1:
+            return -1
+        if fireBoard[-1][-1]==-1:
+            return 10**9
+        diff=fireBoard[-1][-1]-personBoard[-1][-1]
+        if fireBoard[-2][-1]-personBoard[-2][-1]>diff or fireBoard[-1][-2]-personBoard[-1][-2]>diff:
+            return diff
+        return diff-1
+        
+    

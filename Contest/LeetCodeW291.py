@@ -1,5 +1,7 @@
+from functools import cache
 from typing import *
-
+from collections import defaultdict
+from sortedcontainers import SortedList
 class Solution1:
     def removeDigit(self, number: str, digit: str) -> str:
         ans=-1
@@ -76,29 +78,32 @@ class Solution3:
 
 
 class Solution:
+
     def appealSum(self, s: str) -> int:
-        prev=0
-        visited=set()
+        presDict=defaultdict(SortedList)
+        for i,ch in enumerate(s):
+            presDict[ch].add(i)            
         ans=0
-        for i,curr in enumerate(s):
-            
-            print("curr,visited:",curr,visited)
-            if curr not in visited:
-                visited.add(curr)
-                continue
-                
-            lenV=len(visited)
-            ans+=lenV*(lenV+1)//2
-            print("ans:",ans)
-            #prev+=1
+        #print(presDict)
+        @cache
+        def dp(i):
+            if i==0:
+                return 1
+            else:
+                lastAppear=presDict[s[i]].index(i)-1
+                #print("curr,lastAppear:",s[i],presDict[s[i]][lastAppear])
+                ret=dp(i-1)+i-(presDict[s[i]][lastAppear]) if lastAppear>=0 else dp(i-1)+i+1
+                return ret
+        for i in range(len(s)):
+            #print(dp(i))
+            ans+=dp(i)
+        return ans
+        
 
-            while s[prev]!=s[i]:
-                visited.remove(s[prev])
-                prev+=1
-            prev+=1
-
-        lenV=len(visited)
-        ans+=lenV*(lenV+1)//2
-        #prev+=1
-            
+    def appealSum(self, s: str) -> int: # another method, simpler
+        ans=0
+        prev=defaultdict(lambda:-1)
+        for i in range(len(s)):
+            ans+=(i-prev[s[i]])*(len(s)-i)
+            prev[s[i]]=i
         return ans
