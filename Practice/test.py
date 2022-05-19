@@ -1,4 +1,7 @@
-aa=[1,2,3,4]
-aa[1:3]=[200]
-print(aa)
-# result: [1, 200, 4]
+from sortedcontainers import SortedDict
+import sortedcontainers
+import collections
+
+
+sd = SortedDict({"1": 1, "2": 2, "3": 3})
+print(sd.peekitem(1))
