@@ -128,7 +128,10 @@ class Solution4:
         def bfs(queue,board,isFire):
             while queue:
                 r,c,time=queue.pop()
+                if board[r][c]!=-1:
+                    continue
                 board[r][c]=time
+                
                 #print(board[r][c])
                 for nr,nc in [(r+1,c),(r-1,c),(r,c+1),(r,c-1)]:
                     if nr<0 or nr>=m or nc<0 or nc>=n:

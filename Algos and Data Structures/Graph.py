@@ -3,6 +3,9 @@ import collections
 import heapq
 
 def BellmanFord(edges: List[List[int]], N: int, K: int) -> int:
+    # used for dense graph 
+    # O(VE)
+    # no negative cycle
     # N: number of vertices
     # K: source
     # edges: [from,to,weight]
@@ -18,7 +21,16 @@ def BellmanFord(edges: List[List[int]], N: int, K: int) -> int:
     return dist # get distance dict
     # return [dist.get(i, float("inf")) for i in range(N)] # get distance array
 
+'''
+如果我们已经求出了k个离源点距离最近的点，以及它们各自的距离，那么到源点距离第k+1近的点，它到源点的最短路径只能经过这前k个点——
+如果经过了其他点，那么这个其他点显然离源点更近，那这个点一定不是第k+1近了。
+既然只经过这前k个点，那么只用这前k个点放缩就可以找到那个最短路径了。再加上前k-1个点上一轮已经放缩过，所以每一轮只需要用新加入的节点进行放缩就行了。
+'''
 def Dijkstra(times: List[List[int]], N: int, K: int) -> int: # prim ver with pruning, but speed is similar
+    # visited set can be dropped if solving grid problem since the edge is limited to adjacent nodes, see https://leetcode.com/problems/minimum-obstacle-removal-to-reach-corner/discuss/2085640/JavaPython-3-Shortest-Path-w-brief-explanation-analysis-and-similar-problems.
+    # used for sparse graph
+    # O(ElogV+VlogV)， or O(ElogV, if not need to be connected)
+    # no negative edge
     # times = edges = [from,to,weight]
     weight = collections.defaultdict(list)
     for u, v, w in times:
@@ -58,6 +70,7 @@ def Dijkstra(times: List[List[int]], N: int, K: int) -> int: # Prim ver, but the
   
 
 def Floyd(times: List[List[int]], N: int) -> int:
+    # O(n^3)
     dist = [[float("inf") for _ in range(N)] for _ in range(N)]
     for u, v, w in times:
         dist[u][v] = min(w,dist[u][v])
@@ -70,6 +83,8 @@ def Floyd(times: List[List[int]], N: int) -> int:
     return dist
 
 def Prim(edges:List[List[int]] , N: int) -> int:
+    # time complexity is same as dijkstra
+    # used for dense graph
     weight = collections.defaultdict(list)
     for u, v, w in edges:
         weight[u].append((v,w))
@@ -116,6 +131,8 @@ class UnionFind():
         return True
     
 def Kruskal(edges:List[List[int]], N:int) -> int: # regular implementation
+    # used for sparse graph
+    # O(ElogV+ElogE)
     # remember that we can only use half of the edges (arbitary direction for every undirected edge) to get the correct result.
     for edge in edges:
         edge[0],edge[1],edge[2]=edge[2],edge[0],edge[1]

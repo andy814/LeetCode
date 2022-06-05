@@ -12,12 +12,9 @@ class Solution:
                 return float("inf")
             if cands[i]>target:
                 return float("inf")
-
             ans=float("inf")
-            
             if cands[i]==1:
                 for j in range(4):
-                    #print(j)
                     cand=j+dp(i+1,target-cands[i]*j)
                     ans=min(cand,ans)
                 return ans
@@ -26,7 +23,6 @@ class Solution:
                     cand=j+dp(i+1,target-cands[i]*j)
                     ans=min(cand,ans)
                 return ans
-            
         ret= dp(0,n)
         return ret
 

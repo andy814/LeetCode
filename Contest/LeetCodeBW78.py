@@ -80,38 +80,85 @@ class Solution4:
                 ans=max(ans,c.most_common()[0][1]-c.most_common()[-1][1])
         return ans
 
-    def largestVariance(self, s: str) -> int: # O(n^2)
-        def kadane(arr):
+    class Solution:
+     def largestVariance(self, s: str) -> int: # O(n*26*26)
+        def kadane(arr,ch1,ch2):
             ans=-float("inf")
+            meetOther=False
+            startOther=False
             currSum=0
-            for num in arr:
+            for i,num in enumerate(arr):
                 currSum+=num
-                ans=max(currSum,ans)
-                if currSum<0:
-                    currSum=0
+                if currSum==-1:
+                    if meetOther and not startOther:
+                        meetOther=False
+                        startOther=True
+                        continue
+                if currSum<-1:
+                    currSum=-1
+                    startOther=True
+                    meetOther=False
+                    continue
+                if num==-1:
+                    if not meetOther and not startOther:
+                        if currSum-num==0:
+                            startOther=True
+                        else:
+                            meetOther=True
+                    elif not meetOther and startOther:
+                        meetOther=True
+                    elif meetOther and not startOther:
+                        pass # do nothing
+                    else:
+                        pass             
+                if meetOther and startOther:
+                    ans=max(currSum+1,ans)
+                elif meetOther and not startOther:
+                    ans=max(currSum,ans)
+                elif not meetOther and startOther:
+                    ans=max(currSum,ans)
+                else:
+                    pass
             return ans
-
         ans=0
         letters=list(set(s))
         for ch1 in letters:
             for ch2 in letters:
                 if ch1==ch2:
                     continue
-                temp=s.replace("1",ch1)
-                temp=temp.replace("2",ch2)
+                temp=s.replace(ch1,"1")
+                temp=temp.replace(ch2,"2")
                 tempArr=[]
                 for ch in temp:
                     if ch=="2":
                         tempArr.append(1)
                     elif ch=="1":
                         tempArr.append(-1)
-                    else:
-                        tempArr.append(0)
-                        
-                ans=max(ans,kadane(tempArr))
+                ans=max(ans,kadane(tempArr,ch1,ch2))
         return ans
 
 
-                
+# source: https://leetcode.com/problems/substring-with-largest-variance/discuss/2038556/Python3-or-Simple-or-Kadanes-algo-or-Faster-than-100
+# brilliant one compared with my solution.......
+class Solution:
+    def largestVariance(self, s: str) -> int:
+        def kadane(letter1, letter2, string):
+            ans=0
+            cur1=0
+            flag1=True
+            for i in string:
+                if i==letter1:
+                    cur1+=1
+                elif i==letter2:
+                    cur1-=1
+                flag1 &=(i!=letter2)
+                if cur1<0: cur1,flag1=0,True 
+                ans = max(ans, cur1-flag1)
+            return ans
 
-
+        ans = 0
+        for a,b in combinations(set(s), 2):
+            arr = [i for i in s if i==a or i==b]
+            ans= max(ans, kadane(a,b,arr))
+            ans=max(ans,kadane(b,a,arr))
+        return ans

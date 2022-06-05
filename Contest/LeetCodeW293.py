@@ -49,71 +49,66 @@ class Solution3:
                 counts[i]+=int(ch)
         return max(counts)
 
-from sortedcontainers import SortedList
-
-class CountIntervals:
-    def __init__(self):
-        self.count=0
-        self.intervals=SortedList()
-    def add(self, left: int, right: int) -> None:
-        if [left,right] in self.intervals:
-            return
-        idx=bisect.bisect_left(self.intervals,[left,right])
-        if idx==len(self.intervals):
-            self.intervals.add([left,right])
-            if len(self.intervals)==1:
-                self.count+=right-left
-            else:
-                lastRight=self.intervals[-2][1]
-                if left<lastRight:
-                    self.count+=right-lastRight
-                else:
-                    self.count+=right-left
-        elif idx==0:
-            self.intervals.add([left,right])
-            if len(self.intervals)==1:
-                self.count+=right-left
-            else:
-                lastLeft=self.intervals[1][0]
-                if right>lastLeft:
-                    self.count+=lastLeft-left
-                else:
-                    self.count+=right-left
-        else:
-            self.intervals.add([left,right])
-            prevRight=self.intervals[idx-1][1]
-            nextLeft=self.intervals[idx][0]
-            trueLeft=max(left,prevRight)
-            trueRight=min(right,nextLeft)
-            self.count+=trueRight-trueLeft
-
-
-    def count(self) -> int:
-        return self.count
-
-
 
 from sortedcontainers import SortedList
+from sortedcontainers import SortedDict
+class CountIntervals: 
 
-class CountIntervals:
     def __init__(self):
-        self.intervals=SortedList()
+        self.intervals = SortedDict()
+        self.counts=0
 
-    def add(self, left: int, right: int) -> None:
-        self.intervals.add([left,right])
+    def add(self, left: int, right: int) -> None: # time analysis: each interval add and leave the dict once, each operation takes O(logn)
+        if len(self.intervals)==0:
+            self.intervals[left]=right
+            self.counts+=right-left+1
+            return # first region
+        
+        if left in self.intervals and right==self.intervals[left]:
+            return # duplicated region
 
+        leftDone=False
+        rightDone=False
+        while not leftDone:
+            if self.intervals.bisect_left(left)==0: # leftmost
+                if left in self.intervals:
+                    self.counts-=self.intervals[left]-left+1
+                    #self.intervals[left]=max(right,self.intervals[left])
+                    right=max(right,self.intervals[left])
+                    self.intervals.pop(left)
+                leftDone=True
+                break
+    
+            leftInterval=self.intervals.peekitem(self.intervals.bisect_left(left)-1)
+            leftStart=leftInterval[0]
+            leftEnd=leftInterval[1]
+            
+            if leftEnd<left:
+                leftDone=True
+            else: # merge
+                self.intervals.pop(leftStart)
+                self.counts-= leftEnd-leftStart+1
+                left=leftStart
+                right=max(leftEnd,right)
+        
+        while not rightDone:
+            if self.intervals.bisect_left(left)==len(self.intervals):
+                rightDone=True
+                break
+            
+            rightInterval=self.intervals.peekitem(self.intervals.bisect_left(left))
+            rightStart=rightInterval[0]
+            rightEnd=rightInterval[1]
+            if rightStart>right:
+                rightDone=True
+            else: # merge
+                self.intervals.pop(rightStart)
+                self.counts-= rightEnd-rightStart+1
+                left=left
+                right=max(rightEnd,right)
+
+        self.intervals[left]=right
+        self.counts+=right-left+1
+        
     def count(self) -> int:
-        prevLeft=-1
-        prevRight=-1
-        countNbr=0
-        for interval in self.intervals:
-            left=interval[0]
-            right=interval[1]
-            if prevRight<=left:
-                countNbr+=right-prevRight
-            else:
-                countNbr+=right-left+1
-            prevLeft=left
-            prevRight=right
-        return countNbr
-
+        return self.counts
