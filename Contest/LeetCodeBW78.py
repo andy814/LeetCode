@@ -71,6 +71,43 @@ class Solution3:
             ans=max(ans,covered)
         return ans
 
+class Solution3_correct:
+    def maximumWhiteTiles(self, tiles: List[List[int]], carpetLen: int) -> int:
+        
+        if len(tiles)==1:
+            return min(tiles[0][1]-tiles[0][0]+1,carpetLen)
+
+        tiles.sort()
+        prefixes=[0]
+        for tile in tiles:
+            tile[1]+=1
+            prefixes.append(prefixes[-1]+tile[1]-tile[0])
+            
+        #print(prefixes)
+
+        def getSum(i,j): # inclusive
+            return prefixes[j+1]-prefixes[i]
+
+        starts=[tile[0] for tile in tiles]
+        ans=0
+        for i,start in enumerate(starts):
+            end=start+carpetLen
+            endIdx=bisect.bisect_left(starts,end)
+            intersect=min(tiles[endIdx-1][1],end)-tiles[endIdx-1][0]
+            if endIdx==1:
+                cand=intersect
+            else:
+                cand=intersect+getSum(i,endIdx-2)
+            #print(cand)
+            ans=max(ans,cand)
+
+        return ans
+
+
+#
+#[[3,4],[1,2]]
+#1
+
 class Solution4:
     def largestVariance(self, s: str) -> int: # O(n^2)
         ans=0
