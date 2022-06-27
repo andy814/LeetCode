@@ -1,6 +1,2 @@
-import numpy as np
-import matplotlib.pylab as plt
-import padasip as pa
-import time
-
-print(time.time())
+aa=list([0]*2)
+print(aa)

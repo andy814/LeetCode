@@ -14,3 +14,7 @@ https://github.com/azl397985856/leetcode/blob/master/README.md
 60 is hard instead of medium
 94 is easy instead of medium
 144 is easy instead of medium
+
+
+https://leetcode.com/problems/water-and-jug-problem/submissions/
+sometimes TLE, sometimes pass with recursive DFS/BFS
