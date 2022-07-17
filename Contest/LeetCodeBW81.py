@@ -1,3 +1,4 @@
+from copy import deepcopy
 import functools
 from typing import *
 from collections import Counter
@@ -89,6 +90,7 @@ class Solution3:
 
 
 class Solution:
+    '''
     def distinctSequences(self, n: int) -> int:
         @cache
         def math_gcd(a,b):
@@ -115,3 +117,35 @@ class Solution:
             dp[i]=tuple(dpi)
         
         return sum(dp[n])
+    '''
+
+    def distinctSequences(self, n: int) -> int: # top-down
+        mod=10**9+7
+        @cache
+        def dp(n,p,pp):
+            if n==0:
+                return 1
+            else:
+                ans=0
+                for i in range(1,7):
+                    if i!=p and i!=pp and (math.gcd(i,p)==1 or p==0):
+                        ans+=dp(n-1,i,p)%mod
+                return ans
+        return dp(n,0,0)%mod
+
+    from copy import deepcopy
+    def distinctSequences(self, n: int) -> int: # bottom-up
+        mod=10**9+7
+        prev=[[1]*7 for _ in range(7)]
+        curr=[[float("inf")]*7 for _ in range(7)]
+        for i in range(n-1):
+            for p in range(1,7):
+                for pp in range(1,7):
+                    ans=0
+                    for i in range(1,7):
+                        if i!=p and i!=pp and (math.gcd(i,p)==1 or p==0):
+                            ans+=prev[i][p]%mod
+                    curr[p][pp]=ans
+            prev=deepcopy(curr)
+        return prev[0][0]%mod
+

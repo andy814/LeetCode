@@ -1,3 +1,4 @@
+from curses.ascii import US
 from typing import *
 from sortedcontainers import SortedList
 from collections import Counter,defaultdict
@@ -56,6 +57,7 @@ class Solution3:
         return max(rMax,lMax)
 
 class Solution:
+    '''
     def minimumScore(self, nums: List[int], edges: List[List[int]]) -> int: # 90% possibility of getting TLE
         n=len(nums)
         edgeDict=defaultdict(set)
@@ -149,5 +151,50 @@ class Solution:
                 #print(part11,part12,part21,part22,major1,major2,p1,p2)
                 #print(edge1,edge2,XORs)
                 ans=min(ans,max(XORs)-min(XORs))    
+                
+        return ans
+    '''
+
+    def minimumScore(self, nums: List[int], edges: List[List[int]]) -> int: 
+        visited=[False]*len(nums)
+        children=[set() for _ in range(len(nums))]
+        scores=[0]*len(nums)
+        E=defaultdict(list)
+        for edge in edges:
+            E[edge[0]].append(edge[1])
+            E[edge[1]].append(edge[0])
+
+        def dfs(idx):
+            if visited[idx]==False:
+                visited[idx]=True
+                scores[idx]^=nums[idx]
+                for adjV in E[idx]:
+                    if visited[adjV]==False:
+                        children[idx].add(adjV)
+                        dfs(adjV)
+                        children[idx]|=children[adjV]
+                        scores[idx]^=scores[adjV]
+                
+        dfs(0)
+        ans=float("inf")
+
+        for i in range(len(edges)):
+            for j in range(i+1,len(edges)):
+                u=edges[i][0] if edges[i][0] in children[edges[i][1]] else edges[i][1]
+                v=edges[j][0] if edges[j][0] in children[edges[j][1]] else edges[j][1]
+                if u in children[v]:
+                    rootScore=scores[0]^scores[v]
+                    vScore=scores[v]^scores[u]
+                    uScore=scores[u]
+                elif v in children[u]:
+                    rootScore=scores[0]^scores[u]
+                    uScore=scores[u]^scores[v]
+                    vScore=scores[v]
+                else:
+                    rootScore=scores[0]^scores[u]^scores[v]
+                    uScore=scores[u]
+                    vScore=scores[v]
+                #print(i,j,rootScore,uScore,vScore,flag)
+                ans=min( ans,max(rootScore,vScore,uScore)-min(rootScore,vScore,uScore) )
                 
         return ans

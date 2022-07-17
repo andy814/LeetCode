@@ -1,2 +1,2 @@
-aa=list([0]*2)
-print(aa)
+import math
+math.gcd()

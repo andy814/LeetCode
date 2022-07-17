@@ -1,7 +1,7 @@
 from typing import *
 import collections
 import heapq
-
+from collections import deque
 def BellmanFord(edges: List[List[int]], N: int, K: int) -> int:
     # used for dense graph 
     # O(VE)
@@ -182,3 +182,124 @@ def Kruskal(edges: List[List[int]], N:int) -> int: # implement with heap, faster
         if UF.union(u,v):
             res += cost
     return res
+
+class Graph: # note that "visited" array used in this graph is low on efficiency: we use it to show the order of visit
+    # visited can be implemented with set / [0] * |V| (if 0-indexed)
+    def __init__(self,V=None,E=None):
+        self.V=V
+        self.E=E
+            
+    # one node might be appended multiple times
+    def DFS(self,src):
+            visited=[]
+            stack=deque()
+            stack.append(src)
+            while stack:
+                currV=stack.pop()
+                #print(currV)
+                if currV not in visited:
+                    visited.append(currV)
+                    for V in self.E[currV]:
+                        if V not in visited:
+                            stack.append(V)
+            return visited
+
+    # one node might be appended multiple times
+    def BFS(self,src):
+        visited=[]
+        queue=deque()
+        queue.append(src)
+        while queue:
+            currV=queue.popleft()
+            #print(currV)
+            if currV not in visited:
+                visited.append(currV)
+                for V in self.E[currV]:
+                    if V not in visited:
+                        queue.append(V)
+        return visited    
+
+    # only visit each node once
+    def RecursiveDFS(self,src,visited=None):
+        if not visited:
+            visited=[]
+        visited.append(src)
+        for V in self.E[src]:
+            if V not in visited:
+                self.RecursiveDFS(V,visited)
+        return visited
+
+    # append each node exactly once
+    def DFS_once(self,src):
+        visited=[src]
+        stack=deque()
+        stack.append(src)
+        while stack:
+            currV=stack.pop()
+            for V in self.E[currV]:
+                if V not in visited:
+                    visited.append(V)
+                    stack.append(V)
+        return visited
+    
+    # append each node exactly once
+    def BFS_once(self,src):
+        visited=[src]
+        queue=deque()
+        queue.append(src)
+        while queue:
+            currV=queue.popleft()
+            visited.append(currV)
+            for V in self.E[currV]:
+                if V not in visited:
+                    visited.append(V)
+                    queue.append(V)
+        return visited    
+
+    def calcDegree(self):
+        count=dict((u,0) for u in self.V)
+        for v in self.V:
+            for adjv in self.E[v]:
+                count[adjv]+=1
+        return count    
+
+    def TopologySort(self,directed=True):
+        degree=self.calcDegree()
+        seq=[]
+        if directed:
+            Q=deque([u for u in degree if degree[u]==0])
+            while Q:
+                curr=Q.popleft()
+                seq.append(curr)
+                for adjv in self.E[curr]:
+                    degree[adjv]-=1
+                    if degree[adjv]==0:
+                        Q.append(adjv)
+        else:
+            Q=deque([u for u in degree if degree[u]==1])
+            while Q:
+                #print("degree:",degree)
+                curr=Q.popleft()
+                #print("curr:",curr)
+                seq.append(curr)
+                for adjv in self.E[curr]:
+                    degree[adjv]-=1
+                    if degree[adjv]==1:
+                        Q.append(adjv)
+                    
+
+        if len(seq)!=len(self.V):
+            return None
+        else:
+            return seq
+
+V=set(['a','b','c','d'])
+E={
+    "a":set(['b','c','d']), 
+    "b":set(['a','c','d']), 
+    "c":set(['a','b','d']), 
+    "d":set(['b','c','d']) 
+  }
+g=Graph(V,E)
+g.DFS_once('a')
+g.BFS_once('a')
