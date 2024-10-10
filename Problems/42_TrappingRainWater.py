@@ -66,3 +66,25 @@ class Solution:
             bar=min(leftMax[i],rightMax[i])
             total+=max(bar-height[i],0)
         return total 
+
+class Solution:
+    def trap(self,height): # extra space O(1)
+        if len(height)<=2:
+            return 0
+        Lmax=[0]*len(height)
+        Rmax=[0]*len(height)
+        currLmax=height[0]
+        for i in range(1,len(Lmax)):
+            Lmax[i]=currLmax
+            currLmax=max(currLmax,height[i])
+        
+        currRmax=height[-1]
+        for i in range(len(Lmax)-2,-1,-1):
+            Rmax[i]=currRmax
+            currRmax=max(currRmax,height[i])
+            
+        ans=0
+        for i in range(len(height)):
+            ans+=max(0,min(Lmax[i],Rmax[i])-height[i])
+            
+        return ans

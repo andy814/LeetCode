@@ -5,6 +5,7 @@ from typing import *
 # computer_lcp(largest common prefix)
 # return: 函数z[i],为s和s[i,n-1]（即以i开头的后缀）的最长公共前缀的长度
 # 返回一个字串的每个后缀之中，与字串开头相同的最长前缀。
+# time complexity: O(n)
 def z_function(s):
     n = len(s)
     z = [0] * n

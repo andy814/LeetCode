@@ -69,7 +69,7 @@ def quickSort(aa,start,end): # start=0 , end=last index
 def quickSortSub(aa,start,end):
     pivot=aa[end]
     i=start
-    for j in range(start,len(aa)):
+    for j in range(start,end+1):
         if aa[j]<pivot:
             aa[i],aa[j]=aa[j],aa[i]
             i+=1

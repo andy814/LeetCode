@@ -6,10 +6,11 @@ aa=[[0 for j in range(n)] for i in range(m)]
 # 90度旋转
 matrix=[[1,2,3],[4,5,6],[7,8,9]]
 
-# 顺时针：
+# 顺时针：先上下翻转后转置
+# reverse top to bottom then transpose
 matrix[:] = list(map(list,zip(*matrix[::-1])))
 
-# 逆时针：
+# 逆时针：先转置后上下翻转
 matrix[:] = list(map(list,zip(*matrix)))[::-1]
 
 # 转置：

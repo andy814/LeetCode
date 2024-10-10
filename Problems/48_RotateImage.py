@@ -44,4 +44,7 @@ class Solution:
                 for j in range((n+1)//2):
                     rotateFour(i,j,matrix)   
 
+class Solution:
+    def rotate(self, A):
+        A[:]=list(map(list,zip(*A[::-1])))
         

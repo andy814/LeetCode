@@ -11,3 +11,5 @@ def delFiles(path): # path to Temp folder, in this case
                 os.remove(filePath)
         except: # when access denied
             continue
+
+delFiles()

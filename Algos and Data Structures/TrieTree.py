@@ -6,12 +6,12 @@ from typing import *
 # param_2 = obj.search(word)
 # param_3 = obj.startsWith(prefix)
 
-class TrieNode:
+class TrieNode: # isEND也可以存本节点对应的单词(从根到本节点)，更适合查询
     def __init__(self):
         self.children={}
         self.isEnd=False
 
-class Trie:
+class Trie: 
     def __init__(self):
         self.root=TrieNode()
         
@@ -40,3 +40,15 @@ class Trie:
         return True
 
 
+def anotherTrie(words): # not fully explored
+    WORD_KEY = '$'
+
+    trie = {}
+    for word in words:
+        node = trie
+        for letter in word:
+            # retrieve the next node; If not found, create a empty node.
+            node = node.setdefault(letter, {})
+        # mark the existence of a word in trie node
+        node[WORD_KEY] = word
+    return trie

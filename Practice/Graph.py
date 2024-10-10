@@ -58,7 +58,19 @@ class Graph: #
                 for V in self.E[currV]:
                     if V not in visited:
                         queue.append(V)
-        return visited        
+        return visited       
+
+    def quickBFS(self,src): # note that we changed the position of visited check
+        visited=[src]
+        queue=deque()
+        queue.append(src)
+        while queue:
+            currV=queue.popleft()
+            for V in self.E[currV]:
+                if V not in visited:
+                    visited.append(V)
+                    queue.append(V)
+        return visited         
 
     def standardRecursiveDFS(self,src,visited=None):
         if not visited:
@@ -172,5 +184,6 @@ if __name__=="__main__":
         "f":set(['e']),
     }
     g=Graph(V,E)
+    print(g.quickBFS('a'))
     #print(g.calcDegree())
-    print(g.standardTopologySort(False))
+    #print(g.standardTopologySort(False))

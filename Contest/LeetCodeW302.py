@@ -104,7 +104,6 @@ class Solution3_2:
         print(time4-time3)
         return ans
 
-# source: https://leetcode.com/problems/query-kth-smallest-trimmed-number/discuss/2292794/Don't-make-over-complicateor-Easy-and-simple
 class Solution3_3:
     def smallestTrimmedNumbers(self, A: List[str], queries: List[List[int]]) -> List[int]:  
         def solve(top, pos):

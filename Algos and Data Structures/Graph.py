@@ -30,6 +30,7 @@ def Dijkstra(times: List[List[int]], N: int, K: int) -> int: # prim ver with pru
     # visited set can be dropped if solving grid problem since the edge is limited to adjacent nodes, see https://leetcode.com/problems/minimum-obstacle-removal-to-reach-corner/discuss/2085640/JavaPython-3-Shortest-Path-w-brief-explanation-analysis-and-similar-problems.
     # used for sparse graph
     # O(ElogV+VlogV)， or O(ElogV, if not need to be connected)
+    # ↑ I prefer the latter one
     # no negative edge
     # times = edges = [from,to,weight]
     weight = collections.defaultdict(list)
